@@ -15,7 +15,11 @@
     <button class="transition delay-150 duration-300 ease-in-out ...">Hover me</button>
     <button class="transition delay-300 duration-300 ease-in-out ...">Hover me</button>
     <button class="transition delay-700 duration-300 ease-in-out ...">Hover me</button>
-
+    <h2 class="text-2xl font-bold underline">
+        This is a subheading
+    </h2>
+    <h3 class="text-xl font-bold underline">
+        This is a smaller sub
 </body>
 
 </html>

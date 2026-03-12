@@ -8,7 +8,7 @@
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
             <div class="bg-white p-6 rounded-lg shadow">
                 <h2 class="text-xl font-semibold mb-2">Total Pemasukan</h2>
-                <p class="text-2xl font-bold text-green-500">Rp 5.000.000</p>
+                <p class="text-2xl font-bold text-green-500">Rp {{ number_format($total_saldo, 0, ',', '.') }}</p>
             </div>
             <div class="bg-white p-6 rounded-lg shadow">
                 <h2 class="text-xl font-semibold mb-2">Total Pengeluaran</h2>
@@ -30,23 +30,20 @@
         <div class="bg-white p-6 rounded-lg shadow">
             <h2 class="text-xl font-semibold mb-2">Transaksi Terakhir</h2>
             <p class="text-gray-600">Daftar transaksi terakhir yang telah dilakukan</p>
-            <div>
-                <table class="w-full text-left">
-                    <thead>
-                        <tr>
-                            <th class="py-2">Tanggal</th>
-                            <th class="py-2">Deskripsi</th>
-                            <th class="py-2">Kategori</th>
-                            <th class="py-2">Jumlah</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td class="py-2">2024-06-01</td>
-                            <td class="py-2">Gaji Bulanan</td>
-                    </tbody>
-                </table>
-            </div>
+            @if ($recent_transactions > 0)
+
+                @foreach ($recent_transactions as $trx)
+                    <div class="border-t py-4 ">
+                        <{{ $trx['Tanggal'] }} 
+                        {{ $trx['Kategori'] }} 
+                        <{{ $trx['deskripsi'] }}
+                            class="{{ $trx['Tipe'] === 'income' ? 'text-green-500' : 'text-red-600' }} font-bold">
+                            Rp {{ number_format($trx['nominal'], 0, ',', '.') }}
+                    </div>
+                @endforeach
+            @endif
+
         </div>
+    </div>
     </div>
 @endsection

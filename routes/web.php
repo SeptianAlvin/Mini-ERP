@@ -12,3 +12,4 @@ Route::get('/HOME', [DashboardController::class, 'index'])->name('dashboard');
 Route::get('/TRANSAKSI', [TransactionController::class, 'index'])->name('transaction');
 
 Route::get('/KATEGORI', [CategoriesController::class, 'index'])->name('categories');
+Route::get('/LAPORAN', [ReportController::class, 'index'])->name('report');

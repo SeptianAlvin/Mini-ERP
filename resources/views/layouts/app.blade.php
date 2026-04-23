@@ -24,6 +24,8 @@
                     class="block py-2.5 px-4 rounded transition-colors hover:bg-indigo-600">Transaction</a>
                 <a href="{{ route('categories') }}"
                     class="block py-2.5 px-4 rounded transition-colors hover:bg-indigo-600">Category</a>
+                <a href="{{ route('dream') }}"
+                    class="block py-2.5 px-4 rounded transition-colors hover:bg-indigo-600">Dream Planning</a>
             </nav>
         </aside>
         <main class="flex-1 overflow-y-auto">

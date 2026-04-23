@@ -11,14 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('transactions', function (Blueprint $table) {
+        Schema::create('dream_plannings', function (Blueprint $table) {
             $table->id();
-            $table->date('trans_date');
-            $table->string('desc');
-            $table->integer('amount');
-            $table->foreignId('category_id')->constrained('categories')->onDelete('cascade');
+            $table->string('tujuan_tabungan');
+            $table->integer('total_tabungan');
             $table->timestamps();
-            $table->softdeletes();
         });
     }
 
@@ -27,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('transactions');
+        Schema::dropIfExists('dream_plannings');
     }
 };

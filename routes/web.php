@@ -4,12 +4,30 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\CategoriesController;
+use App\Http\Controllers\DreamPlanningController;
 
 Route::get('/', [DashboardController::class, 'index']);
 
 Route::get('/HOME', [DashboardController::class, 'index'])->name('dashboard');
 
+
 Route::get('/TRANSAKSI', [TransactionController::class, 'index'])->name('transaction');
+Route::get('/TRANSAKSI/create', [TransactionController::class, 'create'])->name('transaction.create');
+Route::post('/TRANSAKSI', [TransactionController::class, 'store'])->name('transaction.store');
+Route::get('/TRANSAKSI/{id}/edit', [TransactionController::class, 'edit'])->name('transaction.edit');
+Route::put('/TRANSAKSI/{id}', [TransactionController::class, 'update'])->name('transaction.update');
+Route::delete('/TRANSAKSI/{id}', [TransactionController::class, 'destroy'])->name('transaction.destroy');
 
 Route::get('/KATEGORI', [CategoriesController::class, 'index'])->name('categories');
-Route::get('/LAPORAN', [ReportController::class, 'index'])->name('report');
+Route::get('/KATEGORI/create', [CategoriesController::class, 'create'])->name('categories.create');
+Route::post('/KATEGORI', [CategoriesController::class, 'store'])->name('categories.store');
+Route::get('/KATEGORI/{id}/edit', [CategoriesController::class, 'edit'])->name('categories.edit');
+Route::put('/KATEGORI/{id}', [CategoriesController::class, 'update'])->name('categories.update');
+Route::delete('/KATEGORI/{id}', [CategoriesController::class, 'destroy'])->name('categories.destroy');
+
+Route::get('/DREAM', [DreamPlanningController::class, 'index'])->name('dream');
+Route::get('/DREAM/create', [DreamPlanningController::class, 'create'])->name('dream.create');
+Route::post('/DREAM', [DreamPlanningController::class, 'store'])->name('dream.store');
+Route::get('/DREAM/{id}/edit', [DreamPlanningController::class, 'edit'])->name('dream.edit');
+Route::put('/DREAM/{id}', [DreamPlanningController::class, 'update'])->name('dream.update');
+Route::delete('/DREAM/{id}', [DreamPlanningController::class, 'destroy'])->name('dream.destroy');

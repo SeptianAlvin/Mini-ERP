@@ -14,8 +14,16 @@ class CategorySeeder extends Seeder
      */
     public function run(): void
     {
-        category::create([
-            'cat_name' => 'Salary',
+        Category::create([
+            'cat_name' => 'Gaji',
+            'type' => 'income',
+        ]);
+        Category::create([
+            'cat_name' => 'Sumbangan',
+            'type' => 'expense',
+        ]);
+        Category::create([
+            'cat_name' => 'Streaming',
             'type' => 'income',
         ]);
     }

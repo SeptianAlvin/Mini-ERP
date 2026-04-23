@@ -9,6 +9,6 @@ class Transaction extends Model
     protected $fillable = ['trans_date', 'desc', 'amount','category_id'];
 
     public function category(){
-        return $this->belongsto(Category::class);
+        return $this->belongsTo(Category::class);
     }
 }

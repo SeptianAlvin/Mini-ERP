@@ -2,26 +2,31 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Transaction;
 use Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {
     public function index()
     {
-        $Data =[
-            'total_saldo' => 100000000,
-            'Pemasukan'=> 1000000,
-            'Pengeluaran'=>5000000,
-    
-            'recent_transactions'=> 
-            [
-                
-                    ['Tanggal' => '01 Mar 2026', 'deskripsi' => 'Gaji Bulanan', 'nominal' => 500000, 'Kategori' => 'Gaji', 'Tipe' => 'income'],
-                    ['Tanggal' => '02 Mar 2026', 'deskripsi' => 'Donasi', 'nominal' => 11000, 'Kategori' => 'Sumbangan', 'Tipe' => 'Expense'],
-                    ['Tanggal' => '03 Mar 2026', 'deskripsi' => 'Streaming', 'nominal' => 550000, 'Kategori' => 'Streaming', 'Tipe' => 'income']
+        $pemasukan = Transaction::whereHas('category', function($q) {
+            $q->where('type', 'income');
+        })->sum('amount');
         
-            ]
-            ];
+        $pengeluaran = Transaction::whereHas('category', function($q) {
+            $q->where('type', 'expense');
+        })->sum('amount');
+        
+        $total_saldo = $pemasukan - $pengeluaran;
+        
+        $recent_transactions = Transaction::with('category')->latest()->take(5)->get();
+
+        $Data = [
+            'total_saldo' => $total_saldo,
+            'Pemasukan' => $pemasukan,
+            'Pengeluaran' => $pengeluaran,
+            'recent_transactions' => $recent_transactions,
+        ];
         return view('dashboard', $Data);
     }
 }

@@ -6,6 +6,9 @@ use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
+use App\Models\Transaction;
+use Illuminate\Support\Carbon;
+
 class DatabaseSeeder extends Seeder
 {
     use WithoutModelEvents;
@@ -15,15 +18,27 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // // User::factory(10)->create();
+        $this->call([
+            CategorySeeder::class,
+        ]);
 
-        // User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
-        
-         $this->call([
-            Category::class,
+        Transaction::create([
+            'trans_date' => Carbon::parse('2026-03-01'),
+            'desc' => 'Gaji Bulanan',
+            'amount' => 500000,
+            'category_id' => 1
+        ]);
+        Transaction::create([
+            'trans_date' => Carbon::parse('2026-03-02'),
+            'desc' => 'Donasi',
+            'amount' => 11000,
+            'category_id' => 2
+        ]);
+        Transaction::create([
+            'trans_date' => Carbon::parse('2026-03-03'),
+            'desc' => 'Streaming',
+            'amount' => 550000,
+            'category_id' => 3
         ]);
     }
 }

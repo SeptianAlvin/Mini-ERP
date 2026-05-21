@@ -57,3 +57,4 @@ class CategoriesController extends Controller
         return redirect()->route('categories')->with('success', 'Kategori berhasil dihapus.');
     }
 }
+

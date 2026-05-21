@@ -19,8 +19,12 @@
         </div>
 
         <div class="mb-6">
-            <label for="total_tabungan" class="block text-gray-700 font-bold mb-2">Total Tabungan / Target (Rp)</label>
-            <input type="number" name="total_tabungan" id="total_tabungan" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" value="{{ old('total_tabungan', $dream->total_tabungan ?? '') }}" required min="0" placeholder="Contoh: 15000000">
+            <label for="visible_total_tabungan" class="block text-gray-700 font-bold mb-2">Total Tabungan / Target</label>
+            <div class="relative">
+                <span class="absolute left-3 top-2.5 text-gray-500 font-semibold">Rp</span>
+                <input type="text" id="visible_total_tabungan" class="w-full pl-10 px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" value="{{ old('total_tabungan', $dream->total_tabungan ?? '') ? number_format(old('total_tabungan', $dream->total_tabungan ?? ''), 0, ',', '.') : '' }}" required oninput="formatRupiah(this, 'total_tabungan')" placeholder="Contoh: 15.000.000">
+                <input type="hidden" name="total_tabungan" id="total_tabungan" value="{{ old('total_tabungan', $dream->total_tabungan ?? '') }}" required min="0">
+            </div>
             @error('total_tabungan')
                 <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
             @enderror
@@ -34,4 +38,13 @@
         </div>
     </form>
 </div>
+
+<script>
+    function formatRupiah(element, hiddenId) {
+        let angkaMurni = element.value.replace(/\D/g, '');
+        let rupiahFormat = angkaMurni.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        element.value = rupiahFormat;
+        document.getElementById(hiddenId).value = angkaMurni;
+    }
+</script>
 @endsection

@@ -55,4 +55,33 @@ class DreamPlanningController extends Controller
 
         return redirect()->route('dream')->with('success', 'Dream Planning berhasil dihapus.');
     }
+
+    public function addFunds(Request $request, $id)
+    {
+        $request->validate([
+            'tambahan_dana' => 'required|numeric|min:1',
+        ]);
+
+        $dream = \App\Models\DreamPlanning::findOrFail($id);
+        
+        // 1. Update dana terkumpul
+        $dream->terkumpul += $request->tambahan_dana;
+        $dream->save();
+
+        // 2. Cari atau buat kategori Tabungan Impian
+        $category = \App\Models\Category::firstOrCreate(
+            ['cat_name' => 'Tabungan Impian'],
+            ['type' => 'expense'] // Dianggap sebagai pengeluaran dari saldo utama
+        );
+
+        // 3. Buat transaksi baru
+        \App\Models\Transaction::create([
+            'trans_date' => now()->toDateString(),
+            'desc' => 'Alokasi Tabungan: ' . $dream->tujuan_tabungan,
+            'amount' => $request->tambahan_dana,
+            'category_id' => $category->id
+        ]);
+
+        return redirect()->route('dream')->with('success', 'Dana sejumlah Rp ' . number_format($request->tambahan_dana, 0, ',', '.') . ' berhasil dialokasikan ke ' . $dream->tujuan_tabungan . '.');
+    }
 }

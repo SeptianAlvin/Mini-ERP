@@ -31,3 +31,4 @@ Route::post('/DREAM', [DreamPlanningController::class, 'store'])->name('dream.st
 Route::get('/DREAM/{id}/edit', [DreamPlanningController::class, 'edit'])->name('dream.edit');
 Route::put('/DREAM/{id}', [DreamPlanningController::class, 'update'])->name('dream.update');
 Route::delete('/DREAM/{id}', [DreamPlanningController::class, 'destroy'])->name('dream.destroy');
+Route::put('/DREAM/{id}/add-funds', [DreamPlanningController::class, 'addFunds'])->name('dream.add_funds');

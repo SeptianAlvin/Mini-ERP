@@ -6,5 +6,5 @@ use Illuminate\Database\Eloquent\Model;
 
 class DreamPlanning extends Model
 {
-    protected $fillable = ['tujuan_tabungan', 'total_tabungan'];
+    protected $fillable = ['tujuan_tabungan', 'total_tabungan', 'terkumpul'];
 }

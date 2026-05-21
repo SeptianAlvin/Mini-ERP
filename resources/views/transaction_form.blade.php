@@ -42,8 +42,12 @@
         </div>
 
         <div class="mb-6">
-            <label for="amount" class="block text-gray-700 font-bold mb-2">Nominal (Rp)</label>
-            <input type="number" name="amount" id="amount" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" value="{{ old('amount', $transaction->amount ?? '') }}" required min="0">
+            <label for="visible_amount" class="block text-gray-700 font-bold mb-2">Nominal</label>
+            <div class="relative">
+                <span class="absolute left-3 top-2.5 text-gray-500 font-semibold">Rp</span>
+                <input type="text" id="visible_amount" class="w-full pl-10 px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" value="{{ old('amount', $transaction->amount ?? '') ? number_format(old('amount', $transaction->amount ?? ''), 0, ',', '.') : '' }}" required oninput="formatRupiah(this, 'amount')" placeholder="Contoh: 1.500.000">
+                <input type="hidden" name="amount" id="amount" value="{{ old('amount', $transaction->amount ?? '') }}" required min="0">
+            </div>
             @error('amount')
                 <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
             @enderror
@@ -57,4 +61,13 @@
         </div>
     </form>
 </div>
+
+<script>
+    function formatRupiah(element, hiddenId) {
+        let angkaMurni = element.value.replace(/\D/g, '');
+        let rupiahFormat = angkaMurni.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        element.value = rupiahFormat;
+        document.getElementById(hiddenId).value = angkaMurni;
+    }
+</script>
 @endsection

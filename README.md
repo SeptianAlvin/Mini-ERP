@@ -1,87 +1,81 @@
-# 💸 MoneyTrack (Mini-ERP System)
+# MoneyTrack (Mini-ERP System)
 
-Selamat datang di **MoneyTrack**, sebuah aplikasi manajemen keuangan pribadi & bisnis skala kecil (Mini-ERP) yang dirancang untuk menjadi asisten finansial andalan Anda. 
+MoneyTrack adalah web app sederhana bergaya Mini-ERP yang saya kembangkan untuk manajemen keuangan pribadi dan UMKM. Idenya adalah punya satu tempat yang aman buat mencatat arus kas, tapi dengan *rules* keuangan yang ketat supaya datanya valid dan nggak berantakan.
 
-Aplikasi ini dibuat dengan antarmuka yang sangat modern, ramah pengguna, dan dibekali dengan tingkat keamanan data *(SaaS Multi-Tenancy)* kelas profesional.
-
----
-
-## ✨ Fitur Utama (Features)
-
-Aplikasi ini bukan sekadar pencatat uang biasa, melainkan memiliki perlindungan cerdas di dalamnya:
-
-1. **Dashboard Cerdas & Analitik:** 
-   Melihat ringkasan total Pemasukan, Pengeluaran, dan Saldo Utama Anda secara *Real-Time* dengan tampilan grafik (UI) yang elegan.
-2. **Sistem Banyak Akun (Multi-Tenancy):** 
-   Setiap orang bisa mendaftar dan memiliki akunnya sendiri. Data Anda **100% aman dan terisolasi** dari pengguna lain meskipun berada di database yang sama.
-3. **Pawang Saldo (Financial Integrity):** 
-   Aplikasi ini sangat ketat. Anda **tidak bisa** melakukan pengeluaran yang membuat saldo Anda menjadi minus. Sistem akan memblokir transaksi fiktif tersebut untuk mencegah "uang gaib".
-4. **Perencana Impian (Dream Planner):** 
-   Punya target beli Laptop, Motor, atau Biaya Nikah? Buat *Dream Planner* Anda, sisihkan uang dari saldo utama Anda ke dalam celengan khusus ini, lalu pantau persentase progresnya hingga 100%!
-5. **Tong Sampah Pintar (Soft Deletes):** 
-   Menghapus data transaksi karena tidak sengaja? Jangan panik, data Anda tidak benar-benar hilang melainkan masuk ke "Tong Sampah" dan bisa dikembalikan lagi kapan saja.
+Aplikasi ini sudah mendukung banyak *user* sekaligus dalam satu database, di-desain responsif, dan siap langsung di-deploy ke production.
 
 ---
 
-## 🛠️ Teknologi yang Digunakan
+## 🔥 Key Features
 
-Proyek ini dibangun menggunakan teknologi web modern:
-- **Framework Utama:** [Laravel 11](https://laravel.com/) (PHP)
-- **Desain & UI:** [Tailwind CSS](https://tailwindcss.com/)
-- **Database:** MySQL / SQLite
-- **Font & Ikon:** Google Fonts (Inter) & Heroicons
+Aplikasi ini nggak cuma sekadar aplikasi CRUD biasa. Saya nerapin beberapa *business logic* yang lumayan ketat di *backend*:
+
+### 1. Real-time Analytics Dashboard
+Semua metrik finansial utama (Pemasukan, Pengeluaran, Saldo Netto) langsung dikalkulasi dan divisualisasikan secara *real-time*. UI-nya dibuat se-bersih mungkin biar enak dilihat.
+
+### 2. Multi-Tenant Data Isolation
+Sistem ini menggunakan arsitektur *Multi-Tenancy* lewat `Global Scopes` bawaan Laravel. Artinya, setiap *user* yang register akan punya "ruang kerja" sendiri. Eksekusi *query* ke database dijamin terisolasi 100%, jadi nggak mungkin ada *bug* data pengguna A nyasar ke pengguna B.
+
+### 3. Strict Financial Integrity (Zero-Balance Enforcement)
+Ini fitur keamanan finansial aplikasinya. Saya bikin *validation layer* khusus di mana sistem akan me-reject secara otomatis (baik saat *create*, *update*, atau *delete*) jika aksi tersebut berpotensi bikin Saldo Utama jadi minus / di bawah 0. Jadi, nggak ada lagi cerita "uang fiktif".
+
+### 4. Goal-Oriented Savings (Dream Planner)
+Fitur *sinking fund* untuk misahin alokasi dana khusus (misal beli laptop atau biaya nikah). Dana yang dialokasiin ke target ini bakal dikunci dari Saldo Utama. Kalau targetnya udah 100%, uangnya bisa di-withdraw kembali ke Saldo Utama sebagai dana cair.
+
+### 5. Safe Data Recovery (Soft Deletes)
+Saya implementasiin *Soft Deletes* di tabel transaksi. Kalau *user* salah hapus data pengeluaran/pemasukan, datanya nggak langsung di-drop dari database (disimpan di Trash). Kalau di-restore, sistem akan ngecek ulang apakah *balance*-nya mencukupi sebelum mengembalikan data tersebut.
 
 ---
 
-## 🚀 Panduan Instalasi (Untuk Developer / Profesional)
+## 🛠️ Tech Stack
 
-Jika Anda ingin menjalankan aplikasi ini di komputer lokal Anda (menggunakan Laragon / XAMPP), ikuti langkah-langkah mudah berikut:
+- **Backend:** Laravel 11 (PHP 8.2+)
+- **Frontend:** Blade Templating + Tailwind CSS
+- **Database:** MySQL / MariaDB
 
-### Persyaratan Sistem:
-- **PHP 8.2** atau yang lebih baru.
-- Composer terinstal.
-- Node.js & NPM terinstal (opsional, untuk *compile* CSS jika ingin dimodifikasi).
+---
 
-### Langkah-langkah:
+## 🚀 Cara Install di Local
 
-1. **Buka Terminal / Command Prompt**, lalu masuk ke folder project ini.
-2. **Install Dependensi PHP:**
+Buat yang mau *clone* dan coba *running* di local (pake Laragon atau XAMPP), *setup*-nya gampang banget:
+
+1. Clone repo ini dan masuk ke foldernya via terminal.
+2. Install semua *dependencies*:
    ```bash
    composer install
    ```
-3. **Siapkan File Konfigurasi Lingkungan:**
-   - Duplikat file `.env.example` dan ubah namanya menjadi `.env`
-   - Buka file `.env` dan atur koneksi database Anda (biasanya `DB_DATABASE=mini-erp`, `DB_USERNAME=root`, `DB_PASSWORD=`).
-4. **Generate App Key:**
+3. Copy `.env.example` jadi `.env` dan atur konfigurasi DB kalian:
+   ```env
+   DB_DATABASE=mini-erp
+   DB_USERNAME=root
+   DB_PASSWORD=
+   ```
+4. Generate key bawaan Laravel:
    ```bash
    php artisan key:generate
    ```
-5. **Migrasi Database & Data Awal:**
-   Jalankan perintah ini untuk membangun tabel database beserta akun bawaan (Admin):
+5. Migrate database:
    ```bash
-   php artisan migrate --seed
+   php artisan migrate
    ```
-6. **Jalankan Aplikasi:**
-   Jika tidak menggunakan server seperti Laragon, jalankan:
+6. Tinggal *running*:
    ```bash
    php artisan serve
    ```
-   Lalu buka browser Anda di `http://127.0.0.1:8000`.
+   Buka di browser `http://127.0.0.1:8000`.
 
 ---
 
-## 🔑 Akses Akun (Login)
-Setelah aplikasi berhasil dijalankan, Anda dapat mengklik tombol **"Daftar sekarang"** di halaman Login untuk membuat akun Anda sendiri dari awal dengan lembaran yang bersih (Saldo Rp 0).
+## 🔑 Login
 
-*(Jika Anda mengunduh project ini beserta database bawaannya, Anda mungkin sudah memiliki akun demo, namun disarankan untuk membuat akun baru demi keamanan data Anda sendiri).*
-
----
-
-## 🌐 Catatan Untuk *Hosting* (Cpanel / Hostinger)
-
-Aplikasi ini sudah dikonfigurasi agar ramah-hosting *(Hosting-Friendly)*:
-- Sistem **Otomatis memaksa jalur HTTPS** (bebas dari error *Mixed Content*).
-- Asset gambar (seperti logo) sudah diposisikan agar bisa langsung dibaca oleh *server* tanpa memerlukan perintah rumit seperti `storage:link`.
-- Pastikan saja opsi versi PHP di *Hosting* Anda sudah disetel minimal ke **PHP 8.2**.
+Kalau baru pertama kali jalanin, database pasti kosong. Langsung aja klik **Daftar sekarang** di halaman Login buat bikin akun baru. Begitu register, otomatis dapet *workspace* bersih dengan saldo awal Rp 0.
 
 ---
+
+## 🌐 Notes untuk Deployment (Shared Hosting)
+
+Project ini udah saya *tweak* biar *hosting-friendly*, terutama buat *environment* yang maksa pakai SSL kayak Hostinger:
+
+- **Forced HTTPS:** Udah ada *script* di `AppServiceProvider` yang otomatis nge-force *scheme* ke HTTPS kalau status `.env` ada di `production`. Jadi *bye-bye* error *Mixed Content*.
+- **Asset Routing:** File statis (logo dll) udah diamankan tanpa perlu repot *setup* `storage:link`.
+- Cuma pastiin aja PHP version di cPanel/hPanel kalian udah di-set ke **PHP 8.2**.

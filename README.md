@@ -85,4 +85,3 @@ Aplikasi ini sudah dikonfigurasi agar ramah-hosting *(Hosting-Friendly)*:
 - Pastikan saja opsi versi PHP di *Hosting* Anda sudah disetel minimal ke **PHP 8.2**.
 
 ---
-*Dibuat dengan dedikasi tinggi untuk pengelolaan finansial yang lebih baik dan terstruktur!* 🚀

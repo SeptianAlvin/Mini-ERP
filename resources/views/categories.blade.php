@@ -16,6 +16,12 @@
 </div>
 @endif
 
+@if(session('error'))
+<div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+    {{ session('error') }}
+</div>
+@endif
+
 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
     @foreach ($categories as $category)
         <div class="bg-white p-4 rounded-lg shadow border-l-4 {{ $category->type === 'income' ? 'border-green-500' : 'border-red-500' }} flex justify-between items-center">

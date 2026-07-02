@@ -62,6 +62,20 @@ class DreamPlanningController extends Controller
             'tambahan_dana' => 'required|numeric|min:1',
         ]);
 
+        $pemasukan = \App\Models\Transaction::whereHas('category', function($q) {
+            $q->where('type', 'income');
+        })->sum('amount');
+        
+        $pengeluaran = \App\Models\Transaction::whereHas('category', function($q) {
+            $q->where('type', 'expense');
+        })->sum('amount');
+        
+        $total_saldo = $pemasukan - $pengeluaran;
+
+        if ($request->tambahan_dana > $total_saldo) {
+            return redirect()->back()->withErrors(['tambahan_dana' => 'Saldo Anda tidak mencukupi. Saldo saat ini: Rp ' . number_format($total_saldo, 0, ',', '.')]);
+        }
+
         $dream = \App\Models\DreamPlanning::findOrFail($id);
         
         // 1. Update dana terkumpul

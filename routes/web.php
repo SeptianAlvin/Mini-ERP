@@ -17,6 +17,7 @@ Route::post('/TRANSAKSI', [TransactionController::class, 'store'])->name('transa
 Route::get('/TRANSAKSI/{id}/edit', [TransactionController::class, 'edit'])->name('transaction.edit');
 Route::put('/TRANSAKSI/{id}', [TransactionController::class, 'update'])->name('transaction.update');
 Route::delete('/TRANSAKSI/{id}', [TransactionController::class, 'destroy'])->name('transaction.destroy');
+Route::get('/TRANSAKSI/receipt/{id}', [TransactionController::class, 'showReceipt'])->name('transaction.receipt');
 
 Route::get('/KATEGORI', [CategoriesController::class, 'index'])->name('categories');
 Route::get('/KATEGORI/create', [CategoriesController::class, 'create'])->name('categories.create');

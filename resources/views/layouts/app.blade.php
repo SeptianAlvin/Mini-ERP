@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Money Track')</title>
+    <link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}">
     <!-- Font Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -24,7 +25,7 @@
             <!-- Logo Section -->
             <div class="px-6 pt-8 pb-6 border-b border-slate-700/50">
                 <div class="flex items-center space-x-3">
-                    <img src="{{ asset('storage/images/logo.png') }}" alt="Logo Aplikasi" class="w-10 h-10 rounded shadow-sm bg-white p-0.5">
+                    <img src="{{ asset('images/logo.png') }}" alt="Logo Aplikasi" class="w-10 h-10 rounded shadow-sm bg-white p-0.5">
                     <span class="text-xl font-bold tracking-tight text-white">Money<span class="text-indigo-400">Track</span></span>
                 </div>
             </div>
@@ -62,11 +63,11 @@
             <div class="p-4 border-t border-slate-700/50">
                 <div class="flex items-center px-3 py-2.5 rounded-lg hover:bg-slate-700 cursor-pointer transition-colors border border-transparent hover:border-slate-600">
                     <div class="w-8 h-8 rounded-full bg-slate-600 flex items-center justify-center text-white font-bold text-sm">
-                        A
+                        {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
                     </div>
-                    <div class="ml-3">
-                        <p class="text-sm font-medium text-white">Alvin</p>
-                        <p class="text-xs text-slate-400">Welcome!</p>
+                    <div class="ml-3 truncate">
+                        <p class="text-sm font-medium text-white truncate">{{ Auth::user()->name }}</p>
+                        <p class="text-xs text-slate-400 truncate">{{ Auth::user()->email }}</p>
                     </div>
                 </div>
             </div>
@@ -87,11 +88,14 @@
                         
                         <!-- Profile Action -->
                         <div class="flex items-center border-l border-slate-200 pl-6">
-                            <span class="text-sm text-slate-500 mr-4 hidden sm:block">Welcome back, <span class="font-medium text-slate-800">Alvin</span></span>
-                            <button class="text-slate-500 hover:text-red-600 text-sm py-2 px-3 rounded-lg transition-colors duration-200 flex items-center hover:bg-red-50">
-                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
-                                Logout
-                            </button>
+                            <span class="text-sm text-slate-500 mr-4 hidden sm:block">Welcome back, <span class="font-medium text-slate-800">{{ explode(' ', Auth::user()->name)[0] }}</span></span>
+                            <form action="{{ route('logout') }}" method="POST" class="inline">
+                                @csrf
+                                <button type="submit" class="text-slate-500 hover:text-red-600 text-sm py-2 px-3 rounded-lg transition-colors duration-200 flex items-center hover:bg-red-50">
+                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+                                    Logout
+                                </button>
+                            </form>
                         </div>
                     </div>
                 </div>

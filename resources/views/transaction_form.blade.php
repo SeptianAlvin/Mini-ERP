@@ -22,11 +22,20 @@
             <label for="category_id" class="block text-gray-700 font-bold mb-2">Kategori</label>
             <select name="category_id" id="category_id" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" required>
                 <option value="">-- Pilih Kategori --</option>
-                @foreach($categories as $category)
-                    <option value="{{ $category->id }}" {{ old('category_id', $transaction->category_id ?? '') == $category->id ? 'selected' : '' }}>
-                        {{ $category->cat_name }} ({{ $category->type }})
-                    </option>
-                @endforeach
+                <optgroup label="Pengeluaran">
+                    @foreach($categories->where('type', 'expense') as $category)
+                        <option value="{{ $category->id }}" {{ old('category_id', $transaction->category_id ?? '') == $category->id ? 'selected' : '' }}>
+                            {{ $category->cat_name }}
+                        </option>
+                    @endforeach
+                </optgroup>
+                <optgroup label="Pemasukan">
+                    @foreach($categories->where('type', 'income') as $category)
+                        <option value="{{ $category->id }}" {{ old('category_id', $transaction->category_id ?? '') == $category->id ? 'selected' : '' }}>
+                            {{ $category->cat_name }}
+                        </option>
+                    @endforeach
+                </optgroup>
             </select>
             @error('category_id')
                 <p class="text-red-500 text-sm mt-1">{{ $message }}</p>

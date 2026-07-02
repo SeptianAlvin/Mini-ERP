@@ -51,6 +51,11 @@ class DreamPlanningController extends Controller
     public function destroy($id)
     {
         $dream = \App\Models\DreamPlanning::findOrFail($id);
+
+        if ($dream->terkumpul > 0) {
+            return redirect()->route('dream')->withErrors(['error' => 'Tabungan tidak bisa dihapus karena masih ada dana sebesar Rp ' . number_format($dream->terkumpul, 0, ',', '.') . ' di dalamnya. Harap cairkan terlebih dahulu!']);
+        }
+
         $dream->delete();
 
         return redirect()->route('dream')->with('success', 'Dream Planning berhasil dihapus.');
@@ -93,9 +98,40 @@ class DreamPlanningController extends Controller
             'trans_date' => now()->toDateString(),
             'desc' => 'Alokasi Tabungan: ' . $dream->tujuan_tabungan,
             'amount' => $request->tambahan_dana,
-            'category_id' => $category->id
+            'category_id' => $category->id,
+            'dream_planning_id' => $dream->id
         ]);
 
         return redirect()->route('dream')->with('success', 'Dana sejumlah Rp ' . number_format($request->tambahan_dana, 0, ',', '.') . ' berhasil dialokasikan ke ' . $dream->tujuan_tabungan . '.');
+    }
+
+    public function withdrawFunds(Request $request, $id)
+    {
+        $dream = \App\Models\DreamPlanning::findOrFail($id);
+
+        if ($dream->terkumpul <= 0) {
+            return redirect()->back()->withErrors(['error' => 'Tidak ada dana yang bisa dicairkan.']);
+        }
+
+        // 1. Cari atau buat kategori "Pencairan Tabungan Impian" (Pemasukan)
+        $category = \App\Models\Category::firstOrCreate(
+            ['cat_name' => 'Pencairan Tabungan Impian'],
+            ['type' => 'income']
+        );
+
+        // 2. Buat transaksi pemasukan untuk mengembalikan dana ke saldo utama
+        \App\Models\Transaction::create([
+            'trans_date' => now()->toDateString(),
+            'desc' => 'Pencairan Tabungan: ' . $dream->tujuan_tabungan,
+            'amount' => $dream->terkumpul,
+            'category_id' => $category->id,
+            'dream_planning_id' => $dream->id
+        ]);
+
+        // 3. Update status menjadi completed
+        $dream->status = 'completed';
+        $dream->save();
+
+        return redirect()->route('dream')->with('success', 'Tabungan ' . $dream->tujuan_tabungan . ' berhasil dicairkan sebesar Rp ' . number_format($dream->terkumpul, 0, ',', '.') . ' ke Saldo Utama.');
     }
 }

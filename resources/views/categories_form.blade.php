@@ -20,10 +20,13 @@
 
         <div class="mb-6">
             <label for="type" class="block text-gray-700 font-bold mb-2">Tipe</label>
-            <select name="type" id="type" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" required>
+            <select name="type" id="type" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 {{ isset($hasTransactions) && $hasTransactions ? 'bg-gray-100 cursor-not-allowed' : '' }}" {{ isset($hasTransactions) && $hasTransactions ? 'disabled' : 'required' }}>
                 <option value="income" {{ old('type', $category->type ?? '') == 'income' ? 'selected' : '' }}>Pemasukan (Income)</option>
                 <option value="expense" {{ old('type', $category->type ?? '') == 'expense' ? 'selected' : '' }}>Pengeluaran (Expense)</option>
             </select>
+            @if(isset($hasTransactions) && $hasTransactions)
+                <p class="text-xs text-gray-500 mt-1 italic">Tipe tidak bisa diubah karena kategori ini sedang digunakan pada transaksi.</p>
+            @endif
             @error('type')
                 <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
             @enderror

@@ -51,16 +51,32 @@
                 </div>
 
                 <div class="flex flex-col sm:flex-row items-start sm:items-center space-y-3 sm:space-y-0 sm:space-x-4 w-full lg:w-auto">
-                    <form action="{{ route('dream.add_funds', $dream->id) }}" method="POST" class="flex items-center space-x-2">
-                        @csrf
-                        @method('PUT')
-                        <div class="relative">
-                            <span class="absolute left-3 top-2 text-gray-500 text-sm">Rp</span>
-                            <input type="text" id="visible-{{ $dream->id }}" placeholder="Nominal" required class="border-gray-300 rounded-md shadow-sm text-sm p-2 pl-8 w-36 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" oninput="formatRupiah(this, '{{ $dream->id }}')">
-                            <input type="hidden" name="tambahan_dana" id="hidden-{{ $dream->id }}" required min="1">
+                    @if ($dream->status === 'completed')
+                        <div class="px-4 py-2 bg-gray-100 text-gray-700 font-bold rounded-md border border-gray-300 flex items-center shadow-sm">
+                            <svg class="w-5 h-5 mr-2 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            Selesai & Dicairkan
                         </div>
-                        <button type="submit" class="bg-green-500 hover:bg-green-600 text-white p-2 rounded-md text-sm font-bold shadow transition duration-150 ease-in-out">+ Top Up</button>
-                    </form>
+                    @else
+                        <form action="{{ route('dream.add_funds', $dream->id) }}" method="POST" class="flex items-center space-x-2">
+                            @csrf
+                            @method('PUT')
+                            <div class="relative">
+                                <span class="absolute left-3 top-2 text-gray-500 text-sm">Rp</span>
+                                <input type="text" id="visible-{{ $dream->id }}" placeholder="Nominal" required class="border-gray-300 rounded-md shadow-sm text-sm p-2 pl-8 w-32 xl:w-36 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" oninput="formatRupiah(this, '{{ $dream->id }}')">
+                                <input type="hidden" name="tambahan_dana" id="hidden-{{ $dream->id }}" required min="1">
+                            </div>
+                            <button type="submit" class="bg-green-500 hover:bg-green-600 text-white p-2 rounded-md text-sm font-bold shadow transition duration-150 ease-in-out">+ Top Up</button>
+                        </form>
+
+                        @if ($persen >= 100)
+                            <form action="{{ route('dream.withdraw', $dream->id) }}" method="POST">
+                                @csrf
+                                <button type="submit" class="bg-yellow-400 hover:bg-yellow-500 text-yellow-900 px-3 py-2 rounded-md text-sm font-bold shadow transition duration-150 ease-in-out flex items-center" onclick="return confirm('Tabungan ini akan ditutup dan saldonya akan dikembalikan ke Saldo Utama Anda. Lanjutkan?');">
+                                    🎉 Cairkan
+                                </button>
+                            </form>
+                        @endif
+                    @endif
                     
                     <div class="flex space-x-3 sm:border-l sm:pl-4">
                         <a href="{{ route('dream.edit', $dream->id) }}" class="text-indigo-500 hover:text-indigo-700 text-sm font-bold self-center">Edit</a>
